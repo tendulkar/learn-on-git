@@ -6,6 +6,13 @@ import math
 
 
 def logistic_regression(X_in, y_in):
+    """
+    Simple logistic regression (no hidden layers)
+    Applies for binary as well as general classification
+    :param X_in: Actual training input features, to derive the size of input layer
+    :param y_in: Actual training input labels, to derive the size of the output layer
+    :return: all optimizer, cost, variables, placeholders
+    """
     print("shape(X): {}, shape(y): {}".format(X_in.shape, y_in.shape))
     X = tf.placeholder(tf.float32, shape=[X_in.shape[0], None])
     y = tf.placeholder(tf.float32, shape=[y_in.shape[0], None])
@@ -19,6 +26,14 @@ def logistic_regression(X_in, y_in):
 
 
 def plot_decision_boundary(X, y_, pred_func, C=2):
+    """
+    Automatically plotting decison boundary with the given
+    :param X: Training input features
+    :param y_: Training input labels
+    :param pred_func: Function to predict using trained model
+    :param C: number of classes (not only for binary classification)
+    :return: nothing, effect is showing training points and fill background with decision boundary
+    """
     fig = plt.figure(figsize=(19.20, 10.80), dpi=75)
     colors = ["blue", "black", "red", "magenta", "green", "pink", "yellow"]
     x_min, x_max = X.min() - .5, X.max() + .5
@@ -38,10 +53,6 @@ def plot_decision_boundary(X, y_, pred_func, C=2):
 
 def train_logistic_regression(X_in, y_in, epochs=100, batch_size=64):
     """ Common function for training supervised learning algorithm
-    :param optimizer: tensorflow operation to calculate optimizer
-    :param cost: tensorflow operation to calculate cost
-    :param W: tensor for weight parameters
-    :param b: tensor for bias parameters
     :param X_in: Input data of the shape (number of training examples, number of features)
     :param y_in: labels of above input with shape (number of training examples, number of classes)
     :param epochs: number of full iterations of training data
