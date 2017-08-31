@@ -3458,8 +3458,6 @@ test-results/
 *.log.*
 *.sig
 
-pkg/
-src/
 ### Elisp template
 # Compiled
 *.elc
