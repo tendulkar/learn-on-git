@@ -28,9 +28,11 @@ import scala.collection.JavaConverters._
   */
 object PageRank {
 
-  case class Page(pageId: Long, rank: Double)
+  @SerialVersionUID(53909890123L)
+  case class Page(pageId: Long, rank: Double) extends Serializable
 
-  case class Link(sourceId: Long, targetId: Long)
+  @SerialVersionUID(834759800988L)
+  case class Link(sourceId: Long, targetId: Long) extends Serializable
 
   case class AdjacencyList(sourceId: Long, neighbours: Array[Long])
 

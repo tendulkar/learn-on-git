@@ -6,6 +6,7 @@ import org.apache.flink.examples.java.graph.util.ConnectedComponentsData
 import org.apache.flink.util.Collector
 import org.apache.flink.api.scala._
 
+
 import scala.collection.JavaConverters._
 
 /**
@@ -23,9 +24,11 @@ import scala.collection.JavaConverters._
   */
 object ConnectedComponents {
 
-  case class Vertex(id: Long, label: Long)
+  @SerialVersionUID(798276345L)
+  case class Vertex(id: Long, label: Long) extends Serializable
 
-  case class Link(from: Long, to: Long)
+  @SerialVersionUID(89088988778L)
+  case class Link(from: Long, to: Long) extends Serializable
 
   def getVertices(env: ExecutionEnvironment, params: ParameterTool): DataSet[Vertex] = {
     if (params.has("vertices")) {
@@ -77,7 +80,7 @@ object ConnectedComponents {
         (newVertex, oldVertex, out: Collector[Vertex]) =>
           if (newVertex.label < oldVertex.label) {
             println(s"Adding vertx: $newVertex <- oldVertex: $oldVertex")
-            out.collect(newVertex)
+//            out.collect(newVertex)
           }
       }.withForwardedFieldsFirst("*")
       println("ITERATION done")
