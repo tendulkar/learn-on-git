@@ -25,3 +25,9 @@ True streaming engine (process data as soon as it's received with little buffers
 ## Optimisations
 1. `withForwardFields`, `withForwardFiedlsFirst`, `withForwardFieldsSecond` will help flink to copy the column of data, without replication
 2. similarly for `readFields*` which will be used for reading and evaluating
+
+### Design overview
+#### Iterations:
+1. Applications: Graph, ML
+2. Need multiple iterations (Training, Distance vector, Bellman-ford, Dijkstra, Floyd-Warshall)
+3. updating the dataset for each iteration (weights, neighbours update in Dijkstra, BF, FW, DV)

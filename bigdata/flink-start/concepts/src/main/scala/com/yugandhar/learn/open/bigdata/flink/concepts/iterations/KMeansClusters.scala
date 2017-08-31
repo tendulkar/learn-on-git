@@ -116,9 +116,9 @@ object KMeansClusters {
     // plan for kmeans
     val finalCentroids = centroids.iterate(maxIterations) { currentCentroids =>
       // first, find nearest centroids
-      val clustePts = points.map(new SelectNearest).withBroadcastSet(currentCentroids, "centroids")
+      val clusterPts = points.map(new SelectNearest).withBroadcastSet(currentCentroids, "centroids")
       // recalculate cluster centroid
-      val newCentroids = clustePts.map(x => (x._1, x._2, 1L))
+      val newCentroids = clusterPts.map(x => (x._1, x._2, 1L))
         .groupBy(0).reduceGroup(new GroupReduceFunction[(Int, Point, Long), Centroid] {
         override def reduce(values: lang.Iterable[(Int, Point, Long)], out: Collector[Centroid]): Unit = {
           var cnt = 0d
@@ -132,7 +132,7 @@ object KMeansClusters {
           val centroid = pt.div(cnt)
           out.collect(Centroid(id, centroid.x, centroid.y))
         }
-      })
+      }).withForwardedFields("_1->id")
       newCentroids
     }
     // calculate centroid of each cluster
@@ -141,7 +141,9 @@ object KMeansClusters {
     finalCentroids.print()
     println("++++++++++++++++++++++++++++++++++++++++++++++++++++")
     println("************************Points**********************")
-    result.map(x => (x._1, 1L)).groupBy(0).reduce((p1, p2) => (p1._1, p1._2 + p2._2)).print()
+    result.map(x => (x._1, 1L))
+      .groupBy(0).reduce((p1, p2) => (p1._1, p1._2 + p2._2))
+      .withForwardedFields("_1->_1").print()
     println("====================================================")
     // write to stdout
   }
