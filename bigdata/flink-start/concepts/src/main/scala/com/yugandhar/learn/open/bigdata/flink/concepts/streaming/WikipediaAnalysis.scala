@@ -7,6 +7,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer010
 import org.apache.flink.streaming.connectors.wikiedits.{WikipediaEditEvent, WikipediaEditsSource}
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema
 import org.apache.flink.streaming.api.scala._
+import org.apache.flink.table.api.TableEnvironment
 
 /**
   * Learn:
@@ -42,6 +43,10 @@ object WikipediaAnalysis {
 
       override def merge(a: UserCount, b: UserCount) = UserCount(a.user, a.count + b.count)
     })
+
+    val tableEnv = TableEnvironment.getTableEnvironment(see)
+    val table = tableEnv.fromDataStream(wikiEditEvents)
+    table.join(table).printSchema()
 
     editsByUserInWindow.map(_.toString)
       .addSink(new FlinkKafkaProducer010[String]("localhost:9092", "wiki-result", new SimpleStringSchema()))
