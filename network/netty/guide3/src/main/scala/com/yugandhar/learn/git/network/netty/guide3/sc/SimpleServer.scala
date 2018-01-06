@@ -20,7 +20,7 @@ class MyChannelPipelineFactory extends ChannelPipelineFactory {
   */
 object SimpleServer {
 
-  def shutdownHook(serverBootstrap: ServerBootstrap): Runnable = new Runnable {
+  def releaseResources(serverBootstrap: ServerBootstrap): Runnable = new Runnable {
     override def run(): Unit = {
       println("Clean up server resources")
       val future = TimeServerHandler.allChannels.close()
@@ -39,6 +39,6 @@ object SimpleServer {
     val channel = serverBootstrap.bind(new InetSocketAddress(9700))
     TimeServerHandler.allChannels.add(channel)
     println("Bind done!!")
-    Runtime.getRuntime.addShutdownHook(new Thread(shutdownHook(serverBootstrap)))
+    Runtime.getRuntime.addShutdownHook(new Thread(releaseResources(serverBootstrap)))
   }
 }
